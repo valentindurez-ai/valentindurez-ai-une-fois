@@ -1,62 +1,35 @@
-# Une Fois 🇧🇪 — Symfony + FrankenPHP on Clever Cloud
+# Une Fois 🇧🇪 — Le Grand Vote des Sauces
 
-> A Belgian-culture Symfony app running on FrankenPHP in worker mode: frietkot sauce generator, Belgian beers, comics and a little Belgian-French dictionary. The frietkot counter lives in a static PHP property, so it survives between requests in worker mode — a playful way to show persistent worker processes.
+A tiny Belgian frietkot app: enter your first name, pick your fries sauce (Andalouse, Samouraï, Brazil…). Every order is **written to PostgreSQL** and the live leaderboard + latest orders are **read back** from it.
 
----
+- `public/index.html` — static page (HTML/CSS/vanilla JS)
+- `server.js` — ~90-line Node.js server (no framework) + `pg`
+- Table `commandes` is created automatically at startup
 
-## Routes
-
-| Route            | Description                                              |
-|------------------|----------------------------------------------------------|
-| `/`              | « Une Fois » homepage (frietkot, bières, BD, dico)       |
-| `/api/frites`    | JSON: random sauce + worker stats (PID, counter, uptime) |
-| `/api/belgique`  | JSON: the full Belgian culture catalogue                 |
-| `/stellar`       | Legacy Stellar.ai demo homepage                          |
-
----
-
-## Deploy on Clever Cloud
+## Deploy on Clever Cloud (≈3 min)
 
 ```bash
+npm i -g clever-tools
 clever login
-clever create une-fois --type frankenphp --org orga_8ad87d63-9b0a-49c0-8eb6-83a643cec4f7 --region par
+clever create une-fois --type node --region par
+clever addon create postgresql-addon une-fois-pg --plan dev --link une-fois
 clever deploy
+clever open
 ```
 
-No add-on needed (SQLite). The `.env` file is committed — Symfony requires it at boot.
-Set `APP_SECRET` in the Clever Cloud console to override the placeholder.
-
----
+The PostgreSQL add-on injects `POSTGRESQL_ADDON_URI`; the app listens on `PORT` (8080).
 
 ## Run locally
 
 ```bash
-composer install
-php -S 127.0.0.1:8000 -t public   # or: frankenphp run (uses the Caddyfile, worker mode)
+npm install
+DATABASE_URL=postgres://user:pass@localhost:5432/db npm start
 ```
 
----
+## API
 
-## Stack
-
-| Layer      | Technology                              |
-|------------|-----------------------------------------|
-| Language   | PHP 8.3                                 |
-| Framework  | Symfony 7 (Twig templates)              |
-| Server     | FrankenPHP (worker mode)                |
-| Database   | SQLite (local)                          |
-| Front      | Twig + vanilla CSS/JS (Fraunces, Space Grotesk) |
-
----
-
-## Project Structure
-
-```
-├── src/
-│   ├── Belgique/Culture.php            # Sauces, bières, BD, dico, slogans
-│   └── Controller/BelgiqueController.php # Homepage + JSON API, worker counter
-├── templates/belgique/index.html.twig  # « Une Fois » page
-├── public/                             # Web root
-├── Caddyfile                           # FrankenPHP worker config
-└── .env                                # Committed — required by Symfony
-```
+| Method | Route            | Description                         |
+|--------|------------------|-------------------------------------|
+| GET    | `/api/commandes` | Leaderboard, latest orders, total   |
+| POST   | `/api/commandes` | `{ "prenom": "…", "sauce": "…" }`    |
+| GET    | `/health`        | DB connectivity check               |

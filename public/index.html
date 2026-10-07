@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Une Fois — Le Grand Vote des Sauces</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --noir:#111; --jaune:#FDDA24; --rouge:#EF3340; --creme:#FBF6EA; --gris:#5b5b5b; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--creme); color:var(--noir); font-family:'Space Grotesk',sans-serif; -webkit-font-smoothing:antialiased; }
+  h1, h2 { font-family:'Fraunces',serif; line-height:1.05; }
+  .drapeau { display:flex; height:10px; }
+  .drapeau span { flex:1; }
+  .wrap { max-width:1100px; margin:0 auto; padding:0 16px; }
+  header { padding:48px 0 32px; display:grid; grid-template-columns:1.4fr 1fr; gap:32px; align-items:center; }
+  .badge { display:inline-block; background:var(--noir); color:var(--jaune); padding:6px 14px; border-radius:999px; font-size:13px; font-weight:700; margin-bottom:16px; }
+  h1 { font-size:clamp(40px,7vw,84px); font-weight:800; }
+  h1 .surligne { background:linear-gradient(transparent 60%, var(--jaune) 60%); }
+  header p { font-size:18px; color:var(--gris); margin-top:18px; max-width:520px; }
+  .atomium { width:100%; max-width:300px; justify-self:center; animation:flotte 6s ease-in-out infinite; }
+  @keyframes flotte { 50% { transform:translateY(-12px) rotate(2deg); } }
+
+  .grille { display:grid; grid-template-columns:1fr 1fr; gap:24px; padding-bottom:60px; }
+  .carte { background:#fff; border:2px solid var(--noir); border-radius:22px; padding:28px; }
+  .carte.noire { background:var(--noir); color:var(--creme); }
+  .carte h2 { font-size:32px; margin-bottom:6px; }
+  .carte.noire h2 { color:var(--jaune); }
+  .sous { color:var(--gris); margin-bottom:20px; font-size:15px; }
+  .carte.noire .sous { color:#bbb; }
+
+  label { font-weight:700; font-size:14px; display:block; margin-bottom:8px; }
+  input { width:100%; padding:14px; border-radius:12px; border:2px solid var(--noir); font:inherit; font-size:16px; margin-bottom:18px; }
+  .sauces { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
+  .sauces button { padding:9px 14px; border-radius:999px; border:2px solid var(--noir); background:var(--creme); font:inherit; font-weight:500; cursor:pointer; }
+  .sauces button.choisie { background:var(--jaune); font-weight:700; }
+  .btn { width:100%; padding:16px; border-radius:12px; border:2px solid var(--noir); background:var(--rouge); color:#fff; font:inherit; font-weight:700; font-size:17px; cursor:pointer; transition:transform .15s, box-shadow .15s; }
+  .btn:hover { transform:translate(-2px,-2px); box-shadow:4px 4px 0 var(--noir); }
+  .btn:disabled { opacity:.6; cursor:wait; }
+  .msg { margin-top:12px; min-height:22px; font-weight:700; }
+
+  .barre { margin-bottom:12px; }
+  .barre .ligne { display:flex; justify-content:space-between; font-size:15px; margin-bottom:4px; }
+  .barre .fond { background:#2a2a2a; height:14px; border-radius:999px; overflow:hidden; }
+  .barre .rempli { background:var(--jaune); height:100%; border-radius:999px; transition:width .6s ease; }
+  .barre:first-child .rempli { background:var(--rouge); }
+  .total { font-family:'Fraunces',serif; font-size:44px; color:var(--jaune); font-weight:800; }
+
+  .dernieres { list-style:none; margin-top:20px; border-top:1px solid #333; padding-top:16px; }
+  .dernieres li { padding:6px 0; font-size:14px; color:#ddd; display:flex; justify-content:space-between; gap:12px; }
+  .dernieres time { color:#888; white-space:nowrap; }
+  .vide { color:#999; font-style:italic; }
+
+  footer { padding:24px 0 40px; font-size:14px; color:var(--gris); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+  @media (max-width:800px) {
+    header, .grille { grid-template-columns:1fr; }
+    .atomium { max-width:180px; }
+  }
+</style>
+</head>
+<body>
+<div class="drapeau"><span style="background:var(--noir)"></span><span style="background:var(--jaune)"></span><span style="background:var(--rouge)"></span></div>
+
+<div class="wrap">
+  <header>
+    <div>
+      <span class="badge">🇧🇪 UNE FOIS · CLEVER CLOUD · POSTGRESQL</span>
+      <h1>Le Grand Vote <span class="surligne">des Sauces</span>.</h1>
+      <p>Passe commande au frietkot : ton prénom, ta sauce. Chaque cornet est enregistré dans PostgreSQL, et la Belgique entière saura enfin qui gagne entre l'Andalouse et la Samouraï.</p>
+    </div>
+    <svg class="atomium" viewBox="0 0 300 340" aria-label="Atomium">
+      <g stroke="#111" stroke-width="6" stroke-linecap="round">
+        <line x1="150" y1="40" x2="150" y2="260"/><line x1="60" y1="90" x2="240" y2="230"/><line x1="240" y1="90" x2="60" y2="230"/>
+        <line x1="60" y1="90" x2="240" y2="90"/><line x1="60" y1="230" x2="240" y2="230"/><line x1="60" y1="90" x2="60" y2="230"/>
+        <line x1="240" y1="90" x2="240" y2="230"/><line x1="150" y1="260" x2="110" y2="330"/><line x1="150" y1="260" x2="190" y2="330"/>
+      </g>
+      <g stroke="#111" stroke-width="5">
+        <circle cx="150" cy="40" r="26" fill="#FDDA24"/><circle cx="60" cy="90" r="26" fill="#EF3340"/><circle cx="240" cy="90" r="26" fill="#111"/>
+        <circle cx="150" cy="160" r="30" fill="#FDDA24"/><circle cx="60" cy="230" r="26" fill="#111"/><circle cx="240" cy="230" r="26" fill="#EF3340"/>
+        <circle cx="150" cy="260" r="26" fill="#FBF6EA"/>
+      </g>
+    </svg>
+  </header>
+
+  <div class="grille">
+    <form class="carte" id="form">
+      <h2>Ta commande 🍟</h2>
+      <p class="sous">Grand cornet, évidemment. Pas de ketchup, on n'est pas des sauvages.</p>
+      <label for="prenom">Ton prénom</label>
+      <input id="prenom" maxlength="30" placeholder="Ex. Jean-Claude" required>
+      <label>Ta sauce</label>
+      <div class="sauces" id="sauces"></div>
+      <button class="btn" id="envoyer">Une frite, s'il vous plaît !</button>
+      <div class="msg" id="msg"></div>
+    </form>
+
+    <section class="carte noire">
+      <h2>Le classement</h2>
+      <p class="sous"><span class="total" id="total">…</span> cornets servis (stockés en base)</p>
+      <div id="classement"></div>
+      <ul class="dernieres" id="dernieres"></ul>
+    </section>
+  </div>
+
+  <footer>
+    <span>Une Fois · Node.js + PostgreSQL · hébergé en Europe sur Clever Cloud 🇪🇺</span>
+    <span>Fait avec ❤️ et beaucoup d'andalouse.</span>
+  </footer>
+</div>
+
+<script>
+  let sauceChoisie = null;
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+
+  function afficher(data) {
+    if (!$('sauces').children.length) {
+      $('sauces').innerHTML = data.sauces.map((s) => `<button type="button" data-sauce="${esc(s)}">${esc(s)}</button>`).join('');
+      $('sauces').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+        sauceChoisie = b.dataset.sauce;
+        $('sauces').querySelectorAll('button').forEach((x) => x.classList.toggle('choisie', x === b));
+      }));
+    }
+    $('total').textContent = data.total;
+    const max = Math.max(1, ...data.classement.map((c) => c.votes));
+    $('classement').innerHTML = data.classement.length
+      ? data.classement.map((c) => `
+          <div class="barre"><div class="ligne"><span>${esc(c.sauce)}</span><b>${c.votes}</b></div>
+          <div class="fond"><div class="rempli" style="width:${(c.votes / max) * 100}%"></div></div></div>`).join('')
+      : '<p class="vide">Aucune commande. Le frietkot attend son premier client.</p>';
+    $('dernieres').innerHTML = data.dernieres.map((d) => `
+      <li><span><b>${esc(d.prenom)}</b> a pris ${esc(d.sauce)}</span>
+      <time>${new Date(d.created_at).toLocaleTimeString('fr-BE', { hour:'2-digit', minute:'2-digit' })}</time></li>`).join('');
+  }
+
+  async function charger() {
+    try { afficher(await (await fetch('/api/commandes')).json()); }
+    catch { $('msg').textContent = 'Le frietkot est fermé (drache ?).'; }
+  }
+
+  $('form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!sauceChoisie) { $('msg').textContent = 'Choisis une sauce, une fois !'; return; }
+    $('envoyer').disabled = true;
+    try {
+      const r = await fetch('/api/commandes', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prenom: $('prenom').value, sauce: sauceChoisie }),
+      });
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.erreur);
+      afficher(data);
+      $('msg').textContent = `Merci ${$('prenom').value} ! Ton cornet ${sauceChoisie} est en base. 🍟`;
+    } catch (err) {
+      $('msg').textContent = err.message || 'Oups, réessaie.';
+    } finally {
+      $('envoyer').disabled = false;
+    }
+  });
+
+  charger();
+  setInterval(charger, 10000);
+</script>
+</body>
+</html>

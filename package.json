@@ -1,0 +1,17 @@
+{
+  "name": "une-fois",
+  "version": "1.0.0",
+  "description": "🇧🇪 Le Grand Vote des Sauces — a tiny Belgian frietkot app on Clever Cloud (Node.js + PostgreSQL)",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "pg": "^8.13.0"
+  },
+  "license": "MIT"
+}
