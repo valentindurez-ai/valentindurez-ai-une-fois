@@ -1,0 +1,18 @@
+{
+	frankenphp {
+		worker ./public/index.php
+	}
+	admin off
+}
+
+:{$PORT:8080} {
+	log
+
+	encode zstd br gzip
+
+	root * public/
+
+	php_server {
+		try_files {path} /index.php
+	}
+}
