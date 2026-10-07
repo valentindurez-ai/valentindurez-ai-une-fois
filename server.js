@@ -47,15 +47,17 @@ async function lireCorps(req) {
 }
 
 const server = http.createServer(async (req, res) => {
+  const path = new URL(req.url, 'http://localhost').pathname.replace(/\/+$/, '') || '/';
+  const method = req.method === 'HEAD' ? 'GET' : req.method;
   try {
-    if (req.method === 'GET' && req.url === '/') {
+    if (method === 'GET' && (path === '/' || path === '/index.html')) {
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
       return res.end(indexHtml);
     }
-    if (req.method === 'GET' && req.url === '/api/commandes') {
+    if (method === 'GET' && path === '/api/commandes') {
       return json(res, 200, await etat());
     }
-    if (req.method === 'POST' && req.url === '/api/commandes') {
+    if (method === 'POST' && path === '/api/commandes') {
       const { prenom, sauce } = await lireCorps(req);
       const nom = String(prenom ?? '').trim().slice(0, 30);
       if (!nom || !SAUCES.includes(sauce)) {
@@ -64,7 +66,7 @@ const server = http.createServer(async (req, res) => {
       await db.query('INSERT INTO commandes (prenom, sauce) VALUES ($1, $2)', [nom, sauce]);
       return json(res, 201, await etat());
     }
-    if (req.method === 'GET' && req.url === '/health') {
+    if (method === 'GET' && path === '/health') {
       await db.query('SELECT 1');
       return json(res, 200, { ok: true });
     }
